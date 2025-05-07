@@ -42,6 +42,20 @@ namespace snake
             {
                 x = x - offset;
             }
+            else if(direction == Direction.Up)
+            { 
+                y = y - offset; 
+            }
+            else if(direction == Direction.Down)
+            {
+                y = y + offset;
+            }
+            
+        }
+
+        public bool IsHit(Point p)
+        {
+            return p.x == this.x && p.y == this.y;
         }
 
         public void Draw()
