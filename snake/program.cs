@@ -10,33 +10,26 @@ namespace snake
     {
         static void Main(string[] args)
         {
-            Point p1 = new Point();
-            p1.x = 1;
-            p1.y = 3;
-            p1.sym = '*';
-            p1.Draw();
+            Console.SetWindowSize(80, 65);
+            Console.SetBufferSize(80, 65); // размер окна
 
-            /*int x1 = 1;
-            int y1 = 3;
-            char sym1 = '*';
+            // отрисовка рамки
+            HorizontalLine upLine = new HorizontalLine(0, 78, 0, '+');
+            HorizontalLine downLine = new HorizontalLine(0, 78, 24, '+');
+            VerticalLine leftLine = new VerticalLine(0, 24, 0, '+');
+            VerticalLine rightLine = new VerticalLine(0, 24, 78, '+');
+            upLine.Draw();
+            downLine.Draw();
+            leftLine.Draw();
+            rightLine.Draw();
 
-            Draw(x1, y1, sym1);*/
+            // отрисовка точек
+            Point p = new Point(4, 5, '*');
+            Snake snake = new Snake(p, 4, Direction.Right);
+            snake.Draw();
+            snake.Move();
+            Thread.Sleep(300);
 
-            Point p2 = new Point();
-            p2.x = 4;
-            p2.y = 5;
-            p2.sym = '#';
-            p2.Draw();
-
-            /*int x2 = 4;
-            int y2 = 5;
-            char sym2 = '#';
-
-            Draw(x2, y2, sym2);*/
-            
-            Console.ReadLine();
         }
-
     }
-
 }
