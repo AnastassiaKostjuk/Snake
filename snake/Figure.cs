@@ -6,40 +6,36 @@ using System.Threading.Tasks;
 
 namespace snake
 {
-    internal class Figure
+    class Figure
     {
-        protected List<Point> pList;
+        public List<Point> pList;
 
-        public virtual void Draw()
+        public void Draw()
         {
+            Console.ForegroundColor = ConsoleColor.DarkCyan; // устанавливаем нужный цвет
             foreach (Point p in pList)
             {
                 p.Draw();
             }
         }
-
-        internal bool IsHit(Figure figure)
+        public bool IsHit(Figure figure)
         {
-            foreach(var p in pList)
+            foreach (var p in pList)
             {
-                if(figure.IsHit(p))
-                {
+                if (figure.IsHit(p))
                     return true;
-                }
             }
             return false;
         }
 
-        private bool IsHit(Point point)
+        public bool IsHit(Point point)
         {
-            foreach(var p in pList)
+            foreach (var p in pList)
             {
-                if(p.IsHit(point))
-                {
+                if (p.IsHit(point))
                     return true;
-                }
             }
-            return false ;
+            return false;
         }
     }
 }

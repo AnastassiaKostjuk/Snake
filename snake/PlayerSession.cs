@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace snake
 {
-    enum Direction
+    internal class PlayerSession
     {
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
+        public static string PlayerName { get; set; } = "";
     }
 }

@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace snake
 {
-    internal class Point
+    class Point
     {
         public int x;
         public int y;
         public char sym;
+        public ConsoleColor FoodColor { get; set; } = ConsoleColor.Red;
 
         public Point()
         {
-          
         }
 
-
-        public Point( int _x, int _y, char _sym)
+        public Point(int x, int y, char sym)
         {
-            x = _x;
-            y = _y;
-            sym = _sym;
+            this.x = x;
+            this.y = y;
+            this.sym = sym;
         }
 
         public Point(Point p)
@@ -34,23 +33,22 @@ namespace snake
 
         public void Move(int offset, Direction direction)
         {
-            if(direction == Direction.Right)
+            if (direction == Direction.RIGHT)
             {
                 x = x + offset;
             }
-            else if(direction == Direction.Left)
+            else if (direction == Direction.LEFT)
             {
                 x = x - offset;
             }
-            else if(direction == Direction.Up)
-            { 
-                y = y - offset; 
+            else if (direction == Direction.UP)
+            {
+                y = y - offset;
             }
-            else if(direction == Direction.Down)
+            else if (direction == Direction.DOWN)
             {
                 y = y + offset;
             }
-            
         }
 
         public bool IsHit(Point p)
@@ -60,14 +58,19 @@ namespace snake
 
         public void Draw()
         {
-            Console.SetCursorPosition(x, y);
-            Console.Write(sym);
+            // Проверяем границы перед отрисовкой
+            if (x >= 0 && y >= 0 && x < Console.WindowWidth && y < Console.WindowHeight)
+            {
+                Console.SetCursorPosition(x, y);
+                Console.ForegroundColor = FoodColor;
+                Console.Write(sym);
+            }
         }
 
         public void Clear()
         {
-            sym = ' ';
-            Draw();
+            Console.SetCursorPosition(x, y);
+            Console.Write(' '); // Очищаем пробелом
         }
 
         public override string ToString()

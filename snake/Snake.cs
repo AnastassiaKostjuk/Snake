@@ -6,77 +6,94 @@ using System.Threading.Tasks;
 
 namespace snake
 {
-    internal class Snake : Figure
+    class Snake : Figure
     {
         Direction direction;
+        Direction nextDirection;
 
-        public Snake(Point tail, int lenght, Direction _direction)
+        public Snake(Point tail, int length, Direction _direction)
         {
             direction = _direction;
+            nextDirection = _direction;
             pList = new List<Point>();
-            for(int i = 0; i < lenght; i++)
+
+            for (int i = length - 1; i >= 0; i--)
             {
                 Point p = new Point(tail);
-                p.Move(i, direction);
+                p.Move(i, direction); // теперь голова — первый элемент
                 pList.Add(p);
             }
         }
 
-        internal void Move()
-        {
-            Point tail = pList.First();
-            pList.Remove(tail);
-            Point head = GetNextPoint();
-            pList.Add(head);
 
-            tail.Clear();
+        public void Move(bool grow = false)
+        {
+            direction = nextDirection;
+            Point head = GetNextPoint();
+
+            pList.Insert(0, head);  // Добавляем новую голову
             head.Draw();
+
+            if (!grow)
+            {
+                Point tail = pList.Last();
+                tail.Clear();
+                pList.RemoveAt(pList.Count - 1);  // Удаляем хвост только если не поели
+            }
         }
+
+
 
         public Point GetNextPoint()
         {
-            Point head = pList.Last();
+            Point head = pList.First(); // Голова первый элемент
             Point nextPoint = new Point(head);
             nextPoint.Move(1, direction);
             return nextPoint;
         }
 
-        internal bool IsHitTail()
+        public void HandleKey(ConsoleKey key)
         {
-            var head = pList.Last();
-            for(int i = 0; i < pList.Count - 2; i++)
+            // Запрещаем разворот на 180 градусов
+            switch (key)
             {
-                if (head.IsHit(pList[i]))
-                    return true;
+                case ConsoleKey.LeftArrow when direction != Direction.RIGHT:
+                    nextDirection = Direction.LEFT;
+                    break;
+                case ConsoleKey.RightArrow when direction != Direction.LEFT:
+                    nextDirection = Direction.RIGHT;
+                    break;
+                case ConsoleKey.DownArrow when direction != Direction.UP:
+                    nextDirection = Direction.DOWN;
+                    break;
+                case ConsoleKey.UpArrow when direction != Direction.DOWN:
+                    nextDirection = Direction.UP;
+                    break;
+            }
+        }
+
+        public bool Eat(Point food)
+        {
+            Point head = GetNextPoint();
+            if (head.IsHit(food))
+            {
+                // Добавляем новую точку в конец (хвост)
+                pList.Add(new Point(food));
+                return true;
             }
             return false;
         }
 
-        public void HandleKey(ConsoleKey key)
+        public Point GetHead()
         {
-            if (key == ConsoleKey.LeftArrow)
-                direction = Direction.Left;
-            else if (key == ConsoleKey.RightArrow)
-                direction = Direction.Right;
-            else if (key == ConsoleKey.DownArrow)
-                direction = Direction.Down;
-            else if (key == ConsoleKey.UpArrow)
-                direction = Direction.Up;
+            return pList.First(); // Возвращает первую точку — голову змеи
         }
 
-        internal bool Eat(Point food)
+        public bool CheckSelfCollision()
         {
-            Point head = GetNextPoint();
-            if(head.IsHit(food))
-            {
-                food.sym = head.sym;
-                pList.Add(food);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            Point nextHead = GetNextPoint();
+            return pList.Skip(1).Any(p => p.IsHit(nextHead));
         }
+
     }
 }
